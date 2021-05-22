@@ -1,0 +1,37 @@
+Comandaments:
+1.
+a)
+gcc -o Simple Simple.c
+valgrind --tool=lackey ./Simple
+b)
+gcc -O2 -o Simple Simple.c
+valgrind --tool=lackey ./Simple
+
+2.
+gcc -o Poker Poker.c tiempo.c
+./Poker
+gcc -O2 -o Poker Poker.c tiempo.c
+./Poker
+gcc -finline-limit=500 -O2 -o Poker Poker.c tiempo.c
+./Poker
+
+gcc -o Poker Poker.c tiempo.c
+valgrind --tool=lackey
+gcc -O2 -o Poker Poker.c tiempo.c
+valgrind --tool=lackey
+gcc -finline-limit=500 -O2 -o Poker Poker.c tiempo.c
+valgrind --tool=lackey
+
+Resultats:
+1. a) 15,190,445 b) 190,719
+Quan compilem sense posar cap opció el programa es compila sense fer cap optimització. En canvi si compilem amb l'opció -O2, el programa realitza optimitzacions avançades al compilar que fan que executin menys instruccions.
+
+2. -O0 Temps: 458.691010 ms Cicles: 1098462616 Instruccions: 2,552,585,032 MIPS: CPI: Freqüència: Speedup: 
+   -O2 Temps: 113.071999 ms Cicles: 270815436 Instruccions: 731,204,940 MIPS: CPI: Freqüència: Speedup: 
+   -O2 + "inlining" Temps: 110.536003 Cicles: 271351360 Instruccions: 731,204,983 MIPS: CPI: Freqüència: Speedup: 
+
+3. 
+Speedup màxim teòric: 1/(1-%Cicles)
+-O0 Cicles programa: 1098462616 Cicles rutina:  %Cicles:  Speedup màxim teòric: 
+-O2 Cicles programa: 270815436 Cicles rutina:  %Cicles:  Speedup màxim teòric: 
+
