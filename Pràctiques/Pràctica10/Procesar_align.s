@@ -1,3 +1,7 @@
+.data
+	.align 16
+	zeros: .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
 .text
 	.align 4
 	.globl procesar
@@ -17,24 +21,25 @@ procesar:
 	movl 20(%ebp),%ebx
 	imul %ebx,%ebx
 	addl %eax,%ebx
-for: 	
+for: 
 	cmp %ebx,%eax
 	jge end_for
-	movb (%eax),%cl
-	sub (%esi),%cl
-if:	cmpb $0,%cl
-	je end_if
-	movb $255,%cl
-end_if:	
-	movb %cl,(%edi)
-	incl %eax
-	incl %esi
-	incl %edi
+	movdqa (%eax),%xmm0
+	movdqa (%esi),%xmm1
+	psubb %xmm1,%xmm0
+	movdqa (zeros),%xmm1
+	pcmpgtb %xmm1,%xmm0
+	movdqa %xmm0,(%edi)
+	addl $16,%eax
+	addl $16,%esi
+	addl $16,%edi
 	jmp for
 end_for:
 
+
 # El final de la rutina ya esta programado
 
+	emms	# Instruccion necesaria si os equivocais y usais MMX
 	popl	%edi
 	popl	%esi
 	popl	%ebx
